@@ -6,20 +6,25 @@ This guide is designed to help you prepare for coding interviews by covering ess
 
 ## Table of Contents
 
-- Complexity Analysis
-- Data Structures
-  - Arrays
-  - Linked Lists
-  - Stacks and Queues
-  - Trees
-  - Graphs
-  - Hash Tables
-- Algorithms
-  - Sorting
-  - Searching
-  - Dynamic Programming
-  - Backtracking
-- Problem Solving Patterns
+## Table of Contents
+
+- [Complexity Analysis](#big-o-notation)
+  - [Data Structures](#data-structures)
+    - [Arrays](#arrays)
+    - [Linked Lists](#linked-lists)
+    - [Stacks and Queues](#stacks-and-queues)
+    - [Trees](#trees)
+      - [Searching Trees](#search-tree-algo)
+    - [Graphs](#graphs)
+    - [Hash Tables](#hash-tables)
+    - [Heaps](#heap)
+      - [Example Problems](#example-problems)
+  - [Algorithms](#algorithms)
+    - [Sorting](#sorting)
+    - [Searching](#searching)
+    - [Dynamic Programming](#dynamic-programming)
+    - [Backtracking](#backtracking)
+  - [Problem Solving Patterns](#problem-solving-patterns)
 
 ### Big O Notation
 
@@ -140,7 +145,7 @@ def insert(root, val):
     # If the current node is None, create a new node with the value and return it
     if not root:
         return TreeNode(val)
-    
+
     # If the value to insert is greater than the current node's value,
     # insert the value in the right subtree
     if val > root.val:
@@ -166,7 +171,7 @@ def remove(root, val):
     # If the current node is None, return None
     if not root:
         return None
-    
+
     # If the value to remove is greater than the current node's value,
     # go to the right subtree
     if val > root.val:
@@ -196,7 +201,9 @@ def remove(root, val):
 
 ```
 
-- **DFS O(n)**
+#### Search Tree Algo
+
+#### DFS O(n)
 
 ```python
 # Depth First Search Algorithm
@@ -239,7 +246,7 @@ def postorder(root):
     print(root.val)
 ```
 
-- **BFS O(n)**
+#### BFS O(n)
 
 ```python
 
@@ -258,7 +265,7 @@ def bfs(root):
 
     if root:
         queue.append(root) # Start with the root node
-    
+
     level = 0              # Initialize level counter
     while len(queue) > 0:  # Continue until the queue is empty
         print("level: ", level)
@@ -312,11 +319,92 @@ hash_table['occupation'] = 'Engineer'
 
 ```
 
+### Heaps
+
+#### Example Problems
+
+Problem:
+
+Design a class to find the kth largest element in a stream. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Implement KthLargest class:
+
+KthLargest(int k, int[] nums) Initializes the object with the integer k and the stream of integers nums.
+int add(int val) Appends the integer val to the stream and returns the element representing the kth largest element in the stream.
+
+Solution:
+
+```python
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.k, self.minHeap = k, nums
+
+        # create heap
+        heapq.heapify(self.minHeap)
+
+        # make heap of length k by removing min values
+        while len(self.minHeap) > k:
+            heapq.heappop(self.minHeap)
+
+
+    def add(self, val: int) -> int:
+        # push new val on heap
+        heapq.heappush(self.minHeap, val)
+
+        # if more than k values remove the min
+        if len(self.minHeap) > self.k:
+            heapq.heappop(self.minHeap)
+
+        # return min val at the top of the heap
+        return self.minHeap[0]
+```
+
+Problem:
+
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+
+We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the heaviest two stones have weights x and y with x <= y. The result of this smash is:
+
+If x == y, both stones are destroyed, and
+If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+At the end of the game, there is at most one stone left.
+
+Return the weight of the last remaining stone. If there are no stones left, return 0.
+
+Solution:
+
+```python
+def lastStoneWeight(self, stones: List[int]) -> int:
+    # Create a max heap from the list of stones, where each stone's weight is negated
+    # because Python's heapq module provides a min heap implementation by default.
+    heap = [-s for s in stones]
+    heapq.heapify(heap)
+
+    # Continue processing until only one stone is left in the heap
+    while len(heap) > 1:
+        # Pop the two largest stones from the heap
+        # (since we negated the values, popping gives us the largest stones)
+        y = abs(heapq.heappop(heap))
+        x = abs(heapq.heappop(heap))
+
+        # If the stones have different weights, push the difference back into the heap
+        if x != y:
+            y = -(y - x)  # Negate the result to maintain max heap property
+            heapq.heappush(heap, y)
+
+    # If there's a stone left in the heap, return its weight
+    if heap:
+        return abs(heap[0])
+    else:  # If the heap is empty, return 0
+        return 0
+```
+
 ## Algorithms
 
 ### Sorting
 
-- **Bubble Sort O(n^2)**
+#### Bubble Sort O(n^2)
 
 ```python
 # Bubble Sort implementation
@@ -333,7 +421,7 @@ def bubble_sort(arr):
     return arr
 ```
 
-- **Merge Sort O(n log n)**
+#### Merge Sort O(n log n)
 
 ```python
         def mergeTwoSortedArrays(left, right, nums):
@@ -382,7 +470,7 @@ def bubble_sort(arr):
         return nums
 ```
 
-- **Quick Sort amoritized O(n log n) worst case O(n^2) if array already sorted**
+#### Quick Sort amoritized O(n log n) worst case O(n^2) if array already sorted
 
 ```python
 def quickSort(arr, start, end):
@@ -418,6 +506,8 @@ def quickSort(arr, start, end):
 - **Linear Search O(n)**
 - **Binary Search O(log n)**
 
+#### Binary Search
+
 ```python
 # Binary Search implementation
 def binary_search(arr, x):
@@ -438,7 +528,7 @@ def binary_search(arr, x):
 
 ### Dynamic Programming
 
-- Technique to solve problems by breaking them down into simpler subproblems
+Technique to solve problems by breaking them down into simpler subproblems
 
 ```python
 # Fibonacci Series using Dynamic Programming
@@ -454,7 +544,7 @@ def fibonacci(n, memo={}):
 
 ### Backtracking
 
-- Algorithmic technique for solving recursive problems by trying to build a solution incrementally
+Algorithmic technique for solving recursive problems by trying to build a solution incrementally
 
 ```python
 # N-Queens problem using backtracking
@@ -498,7 +588,7 @@ def solve_n_queens(board, col, n):
 
 ```
 
-- **Bit Manipulation**
+#### Bit Manipulation
 
 ```python
 # AND
@@ -531,7 +621,7 @@ def countBits(n):
 
 ## Problem Solving Patterns
 
-- **Sliding Window**
+#### Sliding Window
 
 ```python
 def max_sum_subarray(arr, k):
@@ -559,7 +649,7 @@ k = 3
 print("Maximum sum of a subarray of size k:", max_sum_subarray(arr, k))
 ```
 
-- **Two Pointers**
+#### Two Pointers
 
 Problem: Given a sorted array of integers and a target value, find if there’s a pair of numbers that add up to the target.
 
@@ -585,5 +675,4 @@ def two_pointer_approach(nums, target):
 nums = [1, 2, 3, 4, 5, 6]
 target = 9
 print(two_pointer_approach(nums, target))  # Output: True, because 3 + 6 = 9
-
 ```
