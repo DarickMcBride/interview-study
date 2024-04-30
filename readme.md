@@ -6,8 +6,6 @@ This guide is designed to help you prepare for coding interviews by covering ess
 
 ## Table of Contents
 
-## Table of Contents
-
 - [Complexity Analysis](#big-o-notation)
 - [Data Structures](#data-structures)
 - [Arrays](#arrays)
