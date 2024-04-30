@@ -468,7 +468,7 @@ def bubble_sort(arr):
         return nums
 ```
 
-#### Quick Sort amoritized O(n log n) worst case O(n^2) if array already sorted
+#### Quick Sort amoritized O(n log n) worst case O(n^2) if array already sorted and we pick a bad pivot
 
 ```python
 def quickSort(arr, start, end):
